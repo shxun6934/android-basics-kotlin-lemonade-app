@@ -54,7 +54,8 @@ class LemonadeTests : BaseTest() {
     @Test
     fun `test_picking_lemon_proceeds_to_squeeze_state`() {
         // Click image to progress state
-        onView(withId(R.id.image_lemon_state)).perform(click())
+        pickLemon() //  or onView(withId(R.id.image_lemon_state)).perform(click())
+
         testState(R.string.lemon_squeeze, R.drawable.lemon_squeeze)
     }
 
@@ -64,8 +65,11 @@ class LemonadeTests : BaseTest() {
     @Test
     fun `test_squeezing_lemon_proceeds_to_drink_state`() {
         // Click image to progress state
-        onView(withId(R.id.image_lemon_state)).perform(click())
+        pickLemon() // or onView(withId(R.id.image_lemon_state)).perform(click())
+
+        // Click image to progress state
         juiceLemon()
+
         testState(R.string.lemon_drink, R.drawable.lemon_drink)
     }
 
@@ -75,10 +79,12 @@ class LemonadeTests : BaseTest() {
     @Test
     fun `test_squeeze_count_snackbar_is_displayed`() {
         // Click image to progress state
+        pickLemon() // or onView(withId(R.id.image_lemon_state)).perform(click())
+
+        // 1 click image
         onView(withId(R.id.image_lemon_state)).perform(click())
-        // Click image to progress state
-        onView(withId(R.id.image_lemon_state)).perform(click())
-        // Click image to progress state
+
+        // Long Click image to know how many times you have currently clicked
         onView(withId(R.id.image_lemon_state)).perform(longClick())
         onView(withId(com.google.android.material.R.id.snackbar_text))
             .check(matches(withText("Squeeze count: 1, keep squeezing!")))
@@ -90,10 +96,14 @@ class LemonadeTests : BaseTest() {
     @Test
     fun `test_drinking_juice_proceeds_to_restart_state`() {
         // Click image to progress state
-        onView(withId(R.id.image_lemon_state)).perform(click())
-        juiceLemon()
-        onView(withId(R.id.image_lemon_state)).perform(click())
+        pickLemon() // or onView(withId(R.id.image_lemon_state)).perform(click())
+
         // Click image to progress state
+        juiceLemon()
+
+        // Click image to progress state
+        drinkJuice() // or onView(withId(R.id.image_lemon_state)).perform(click())
+
         testState(R.string.lemon_empty_glass, R.drawable.lemon_restart)
     }
 
@@ -103,12 +113,17 @@ class LemonadeTests : BaseTest() {
     @Test
     fun `test_restarting_proceeds_to_pick_lemon_state`() {
         // Click image to progress state
-        onView(withId(R.id.image_lemon_state)).perform(click())
+        pickLemon() // or onView(withId(R.id.image_lemon_state)).perform(click())
+
+        // Click image to progress state
         juiceLemon()
+
         // Click image to progress state
-        onView(withId(R.id.image_lemon_state)).perform(click())
+        drinkJuice() // or onView(withId(R.id.image_lemon_state)).perform(click())
+
         // Click image to progress state
-        onView(withId(R.id.image_lemon_state)).perform(click())
+        restart() /// or onView(withId(R.id.image_lemon_state)).perform(click())
+
         testState(R.string.lemon_select, R.drawable.lemon_tree)
     }
 }
